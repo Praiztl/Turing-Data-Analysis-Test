@@ -1,0 +1,159 @@
+---
+title: "tURING"
+output: html_document
+---
+
+
+
+```
+cardio_base <- read.csv("cardio_base.csv")
+cardio_base <- read.table(text_data, header = TRUE)
+```
+```{r}
+# Assuming your data is already in a data frame called 'cardio_base' with columns 'gender' and 'smoking'
+
+# Count the number of smokers among men
+men_smokers_count <- sum(cardio_base$gender == 1 & cardio_base$smoking == 0)
+
+# Count the number of smokers among women
+women_smokers_count <- sum(cardio_base$gender == 2 & cardio_base$smoking == 0)
+
+# Compare the counts to determine who smokes more
+if (men_smokers_count > women_smokers_count) {
+  print("Men smoke more.")
+} else if (men_smokers_count < women_smokers_count) {
+  print("Women smoke more.")
+} else {
+  print("Men and women smoke equally.")
+}
+
+```
+```{r}
+# Assuming your data frame is named 'cardio_base' and contains a column named 'height'
+
+# Calculate the average height
+avg_height <- mean(cardio_base$height)
+
+# Calculate the standard deviation of height
+std_dev_height <- sd(cardio_base$height)
+
+# Calculate the threshold for being more than 2 standard deviations away
+threshold <- avg_height + (2 * std_dev_height)
+
+# Count the number of people above the threshold
+num_above_threshold <- sum(cardio_base$height > threshold)
+
+# Calculate the percentage of people above the threshold
+percentage_above_threshold <- (num_above_threshold / nrow(cardio_base)) * 100
+
+# Print the result
+print(paste("Percentage of people more than 2 standard deviations away from the average height:", percentage_above_threshold))
+
+
+```
+
+```{r}
+# Assuming your merged data frame is named 'merged_df'
+
+# Subset the data for people over 50 years old and alcohol consumers
+over_50_alcohol_consumers <- merged_df[merged_df$age > 50 & merged_df$alco == 1, ]
+
+# Count the number of people over 50 who consume alcohol
+num_over_50_alcohol_consumers <- nrow(over_50_alcohol_consumers)
+
+# Print the result
+cat("Number of people over 50 who consume alcohol:", num_over_50_alcohol_consumers, "\n")
+
+
+```
+```{r}
+# Assuming your merged data frame is named 'merged_df'
+
+# Subset the data for people over 50 years old
+over_50 <- merged_df[merged_df$age > 50, ]
+
+# Count the number of people over 50 who drink alcohol
+num_alcohol_consumers <- sum(over_50$alco == 1)
+
+# Calculate the total number of people over 50
+total_over_50 <- nrow(over_50)
+
+# Calculate the percentage of people over 50 who drink alcohol
+percentage_alcohol_consumers <- (num_alcohol_consumers / total_over_50) * 100
+
+# Print the result
+cat("Percentage of people over 50 who drink alcohol:", percentage_alcohol_consumers, "%\n")
+```
+```{r}
+# Subset the data for people over 50 and calculate the average cholesterol level
+cholesterol_over_50 <- mean(cardio_base$cholesterol[cardio_base$age > 50])
+
+# Subset the data for people below 50 and calculate the average cholesterol level
+cholesterol_below_50 <- mean(cardio_base$cholesterol[cardio_base$age <= 50])
+
+# Calculate the percentage difference in cholesterol levels
+percentage_difference <- ((cholesterol_over_50 - cholesterol_below_50) / cholesterol_below_50) * 100
+
+# Print the percentage difference
+cat("The percentage difference in cholesterol levels between people over 50 and the rest is", percentage_difference, "%.\n")
+
+```
+```{r}
+# Calculate the average cholesterol level for smokers and non-smokers
+smokers_cholesterol <- mean(merged_df$cholesterol[merged_df$smoke == 1])
+non_smokers_cholesterol <- mean(merged_df$cholesterol[merged_df$smoke == 0])
+
+if (smokers_cholesterol > non_smokers_cholesterol) {
+  cat("Smokers have higher cholesterol levels than non-smokers.\n")
+} else if (smokers_cholesterol < non_smokers_cholesterol) {
+  cat("Non-smokers have higher cholesterol levels than smokers.\n")
+} else {
+  cat("Smokers and non-smokers have the same cholesterol levels.\n")
+}
+
+```
+```{r}
+library(dplyr)
+
+# Group the data by location and arrange by date
+covid_data <- covid_data %>%
+  group_by(location) %>%
+  arrange(date)
+
+# Calculate cumulative deaths for each country
+covid_data <- covid_data %>%
+  mutate(cumulative_deaths = cumsum(new_deaths))
+
+# Calculate death rate for each country
+covid_data <- covid_data %>%
+  mutate(death_rate = (cumulative_deaths / population) * 1e6)
+
+# Sort the data by death rate in descending order
+sorted_data <- covid_data %>%
+  arrange(desc(death_rate))
+
+# Check if there are at least 3 countries with valid death rate values
+if (nrow(sorted_data) >= 3) {
+  # Get the country at the third position
+  third_highest_country <- sorted_data$location[3]
+  
+  # Print the country with the 3rd highest death rate
+  print(third_highest_country)
+} else {
+  print("Insufficient data to determine the 3rd highest death rate.")
+}
+
+
+```
+```{r}
+# Subset the dataframe for Italy and the specified date range
+italy_data_subset <- covid_data[covid_data$location == "Italy" & covid_data$date >= "2020-02-28" & covid_data$date <= "2020-03-20", ]
+
+# Calculate the number of days passed from the start date (2020-02-28)
+italy_data_subset$days_passed <- as.integer(as.Date(italy_data_subset$date) - as.Date("2020-02-28"))
+
+# Print the updated dataframe
+print(italy_data_subset)
+
+
+```
