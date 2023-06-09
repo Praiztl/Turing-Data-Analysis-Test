@@ -6,6 +6,7 @@ output: html_document
 
 
 ```
+#importing my csv file
 cardio_base <- read.csv("cardio_base.csv")
 cardio_base <- read.table(text_data, header = TRUE)
 ```
